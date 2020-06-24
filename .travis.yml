@@ -1,0 +1,14 @@
+dist: bionic
+language: python
+
+python:
+  - "3.7"
+  - "3.8"
+  - "nightly"
+install:
+  - pip install -r requirements.txt
+  - pip install .
+script: pytest --cov=./privex --cov=./bin tests.py
+after_success:
+  - codecov
+

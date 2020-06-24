@@ -1,0 +1,16 @@
+privex-helpers[setuptools]>=2.13.0
+PyOTA[ccurl,pow]
+requests
+pytz
+colorama
+
+# Unit testing
+coverage
+pytest
+pytest-cov
+codecov
+
+# Building / publishing
+wheel
+twine
+setuptools
