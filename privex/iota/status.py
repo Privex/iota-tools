@@ -21,38 +21,24 @@ Copyright::
 
 """
 import argparse
-import sys
+
 import requests.exceptions
 from typing import Optional, List, Tuple
 
 from colorama import Fore
-from privex.helpers import ErrHelpParser, empty, empty_if, DictObject
+from privex.helpers import ErrHelpParser, empty, empty_if
 
 from privex.iota import settings
-from privex.iota.client import PrivexIota, IOTANodeInfo
+from privex.iota.client import err, get_iota
+from privex.iota.neighbors import display_neighbors
+from privex.iota.objects import NodeInfo
 import logging
 
 log = logging.getLogger(__name__)
 
 
-def err(*args, file=sys.stderr, **kwargs):
-    print(*args, file=file, **kwargs)
-
-
 class CriticalNodeFailure(SystemExit):
     code = 2
-
-
-STORAGE = DictObject(iota=None)
-
-
-def get_iota(host=None, new_instance=False, **kwargs) -> PrivexIota:
-    host = empty_if(host, settings.IOTA_HOST)
-    if new_instance or empty(STORAGE.get('iota')):
-        if 'iota' in STORAGE:
-            del STORAGE['iota']
-        STORAGE.iota = PrivexIota(adapter=host, **kwargs)
-    return STORAGE.iota
 
 
 def print_intro():
@@ -90,7 +76,7 @@ def handle_args() -> argparse.Namespace:
     return args
 
 
-def load_node_info(host: Optional[str] = None) -> IOTANodeInfo:
+def load_node_info(host: Optional[str] = None) -> NodeInfo:
     """
     
     :param host:
@@ -135,8 +121,10 @@ def main(host=None):
     iter_cols(cols)
     print()
 
+    display_neighbors()
 
-def gen_cols(node_info: IOTANodeInfo) -> List[Tuple[str, str, str]]:
+
+def gen_cols(node_info: NodeInfo) -> List[Tuple[str, str, str]]:
     behind = str(node_info.time_behind).split('.')[0]
     human_synced = f"{Fore.GREEN}YES{Fore.RESET}" if node_info.isSynced else f"{Fore.RED}NO{Fore.RESET}"
     return [

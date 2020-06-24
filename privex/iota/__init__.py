@@ -41,11 +41,12 @@ import logging
 import sys
 
 from privex.loghelper import LogHelper
-from privex.iota.client import IOTANodeInfo, PrivexIota
+from privex.iota.client import PrivexIota
+from privex.iota.objects import Neighbor, NodeInfo, NeighborRes
 from privex.iota.status import print_intro, gen_cols, iter_cols, main as iota_status_app, load_node_info
 
 name = 'iota'
-VERSION = '0.7.0'
+VERSION = '0.8.0'
 
 _lh = LogHelper(__name__, handler_level=logging.INFO)
 _lh.add_console_handler(stream=sys.stderr)
